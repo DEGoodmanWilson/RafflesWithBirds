@@ -22,7 +22,10 @@ module Raffler
           # this is ridiculously ineffecient, but whatever.
           list = []
 
-          client.search("##{params[:hashtag]}").each do |tweet|
+          # we want only tweets from _today_. So get the date.
+          today = Time.now.strftime("%Y-%m-%d")
+
+          client.search("##{params[:hashtag]} since:#{today}").each do |tweet|
             list.push(tweet)
           end
 
@@ -32,6 +35,7 @@ module Raffler
 
           {
               screen_name: tweet.user.screen_name,
+              date: tweet.created_at,
               text: tweet.text
           }
         end
